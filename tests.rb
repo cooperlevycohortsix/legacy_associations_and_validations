@@ -24,5 +24,13 @@ class ApplicationTest < Minitest::Test
   def test_truth
     assert true
   end
+  
+
+  def test_associate_school_with_terms
+    s = School.new(name: "Haavad")
+    t = Term.new(name: "Fall")
+    assert s.terms << t
+    assert_equal "Haavad", t.school_name
+  end
 
 end
