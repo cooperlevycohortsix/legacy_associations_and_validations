@@ -1,5 +1,6 @@
 class Term < ActiveRecord::Base
 belongs_to :school
+has_many :courses, dependent: :restrict_with_error
 
   default_scope { order('ends_on DESC') }
 
@@ -8,6 +9,4 @@ belongs_to :school
   def school_name
     schools ? school.name : "None"
   end
-
-  
 end

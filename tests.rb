@@ -1,10 +1,12 @@
 # Basic test requires
 require 'minitest/autorun'
 require 'minitest/pride'
-
+require 'byebug'
 # Include both the migration and the app itself
 require './migration'
 require './application'
+require './school'
+require './term'
 
 # Overwrite the development database connection with a test connection.
 ActiveRecord::Base.establish_connection(
@@ -28,20 +30,31 @@ class ApplicationTest < Minitest::Test
   def test_associate_schools_with_terms
      school = School.create(name: "Haavad")
      term = Term.create(name: "Fall")
-     school.add_term(term)
+     school.terms << term
      assert school.terms.include?(term)
      assert_equal school, term.school
 
   end
 
-  def test_terms_with_courses
+  def test_associate_terms_with_courses_not_deletable_if
       term = Term.create(name: "Fall")
       course = Course.create(name: "Biologie")
-      term.add_course(course)
-      assert term.courses.include?(course)
-      assert_equal term, course.term
+      term.courses << course
+      term.destroy
+      refute term.destroyed?
   end
 
+
+  def test_associate_course_with_course_students_not_deletable_if
+      course = Course.create(name: "Metalurgy")
+      course_student = CourseStudent.create(student_id: 100)
+      course.course_students <<  course_student
+      course.destroy
+      refute course.destroyed?
+
+  end
+
+  def 
 
 
 
