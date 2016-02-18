@@ -24,13 +24,28 @@ class ApplicationTest < Minitest::Test
   def test_truth
     assert true
   end
-  
 
-  def test_associate_school_with_terms
-    s = School.new(name: "Haavad")
-    t = Term.new(name: "Fall")
-    assert s.terms << t
-    assert_equal "Haavad", t.school_name
+
+  # def test_associate_school_with_terms
+  #   s = School.new(name: "Haavad")
+  #   t = Term.new(name: "Fall")
+  #   assert s.terms << t
+  #   assert_equal "Haavad", t.school_name
+  # end
+
+  def test_associate_lessons_with_readings
+    l = Lesson.create(name: "Basketweaving")
+    r = Reading.create(caption: "good read", url: "https//goodread.com", order_number: 1)
+    l.add_readings(r)
+    assert_equal r, l.readings.last
+  end
+
+  def test_lessons_readings_removed_when_lessons_destroyed
+    l = Lesson.new(name: "Basketweaving")
+    r = Reading.create(caption: "good read", url: "https//goodread.com", order_number: 1)
+    l.add_readings(r)
+    l.destroy
+    assert r.destroyed?
   end
 
 end
