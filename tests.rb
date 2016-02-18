@@ -25,4 +25,24 @@ class ApplicationTest < Minitest::Test
     assert true
   end
 
+  def test_associate_schools_with_terms
+     school = School.create(name: "Haavad")
+     term = Term.create(name: "Fall")
+     school.add_term(term)
+     assert school.terms.include?(term)
+     assert_equal school, term.school
+
+  end
+
+  def test_terms_with_courses
+      term = Term.create(name: "Fall")
+      course = Course.create(name: "Biologie")
+      term.add_course(course)
+      assert term.courses.include?(course)
+      assert_equal term, course.term
+  end
+
+
+
+
 end
