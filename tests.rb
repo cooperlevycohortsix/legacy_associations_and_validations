@@ -35,17 +35,31 @@ class ApplicationTest < Minitest::Test
 
   def test_associate_lessons_with_readings
     l = Lesson.create(name: "Basketweaving")
-    r = Reading.create(caption: "good read", url: "https//goodread.com", order_number: 1)
+    r = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
     l.add_readings(r)
     assert_equal r, l.readings.last
   end
 
   def test_lessons_readings_removed_when_lessons_destroyed
     l = Lesson.new(name: "Basketweaving")
-    r = Reading.create(caption: "good read", url: "https//goodread.com", order_number: 1)
+    r = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
     l.add_readings(r)
     l.destroy
     assert r.destroyed?
   end
 
+  def test_courses_are_associated_with_lessons
+    c = Course.create(name: "Basketweaving 101", course_code: "12345")
+    l = Lesson.create(name: "Basketweaving as a means of social engineering")
+    c.add_lessons(l)
+    assert_equal l, c.lessons.last
+  end
+
+  def test_if_course_destroyed_all_lessons_destroyed
+    c = Course.create(name: "Basketweaving 101", course_code: "12345")
+    l = Lesson.create(name: "Basketweaving as a means of social engineering")
+    c.add_lessons(l)
+    c.destroy
+    assert l.destroyed?
+  end
 end

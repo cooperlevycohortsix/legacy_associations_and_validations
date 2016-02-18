@@ -1,5 +1,5 @@
 class Course < ActiveRecord::Base
-
+  has_many :lessons, dependent: :destroy
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
   # Magic number also used in old? method below.
@@ -9,6 +9,10 @@ class Course < ActiveRecord::Base
 
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
+
+  def add_lessons(new_lesson)
+    lessons << new_lesson
+  end
 
   def self.example_courses
     self.where(public: true).order("id DESC").first(5)
