@@ -1,7 +1,7 @@
 # Basic test requires
 require 'minitest/autorun'
 require 'minitest/pride'
-
+require 'byebug'
 # Include both the migration and the app itself
 require './migration'
 require './application'
@@ -25,14 +25,6 @@ class ApplicationTest < Minitest::Test
     assert true
   end
 
-
-  # def test_associate_school_with_terms
-  #   s = School.new(name: "Haavad")
-  #   t = Term.new(name: "Fall")
-  #   assert s.terms << t
-  #   assert_equal "Haavad", t.school_name
-  # end
-
   def test_associate_lessons_with_readings
     l = Lesson.create(name: "Basketweaving")
     r = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
@@ -55,11 +47,16 @@ class ApplicationTest < Minitest::Test
     assert_equal l, c.lessons.last
   end
 
-  def test_if_course_destroyed_all_lessons_destroyed
+  def test_a_course_can_not_be_destroyed_if_course_instructors_exit
+    output = ""
     c = Course.create(name: "Basketweaving 101", course_code: "12345")
-    l = Lesson.create(name: "Basketweaving as a means of social engineering")
-    c.add_lessons(l)
-    c.destroy
-    assert l.destroyed?
+    ci = CourseInstructor.create
+    c.add_course_instructor(ci)
+    begin
+      c.destroy
+    rescue
+      output = "can't destroy"
+    end
+    assert "can't destroy", output
   end
 end

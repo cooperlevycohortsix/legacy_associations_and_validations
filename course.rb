@@ -1,4 +1,5 @@
 class Course < ActiveRecord::Base
+  has_many :course_instructors, dependent: :restrict_with_exception
   has_many :lessons, dependent: :destroy
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
@@ -9,6 +10,10 @@ class Course < ActiveRecord::Base
 
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
+
+  def add_course_instructor(new_instructor)
+    course_instructors << new_instructor
+  end
 
   def add_lessons(new_lesson)
     lessons << new_lesson
