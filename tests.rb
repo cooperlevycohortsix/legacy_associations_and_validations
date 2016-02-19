@@ -77,7 +77,14 @@ class ApplicationTest < Minitest::Test
   def test_schools_must_have_a_name
     new_s = School.create(name: "Harvard")
     school = School.create()
-    refute school.name
+    refute school.id
     assert new_s.name
+  end
+
+  def test_terms_must_have_name_starts_on_ends_on_and_school_id
+    t = Term.create()
+    new_t = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 4)
+    refute t.id
+    assert new_t.starts_on
   end
 end
