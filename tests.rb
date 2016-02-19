@@ -82,4 +82,17 @@ class ApplicationTest < Minitest::Test
     term.courses << c1
     assert_equal c1, school.courses.last
   end
+
+  def test_lessons_have_names
+    new_lesson = Lesson.create(name: "biostatistics")
+    assert new_lesson.name
+  end
+
+  def test_readings_have_order_numbers_lesson_ids_and_url
+    new_reading = Reading.create()
+    refute new_reading.valid?
+  end
+
+  #Validate that the Readings url must start with http:// or https://. Use a regular expression.
+  
 end
