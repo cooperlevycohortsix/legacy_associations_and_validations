@@ -1,6 +1,7 @@
 class Course < ActiveRecord::Base
   has_many :course_instructors, dependent: :restrict_with_exception
   has_many :lessons, dependent: :destroy
+  has_many :readings, through: :lessons
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
   # Magic number also used in old? method below.
@@ -10,6 +11,10 @@ class Course < ActiveRecord::Base
 
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
+
+  def add_readings(new_reading)
+    lessons << new_reading
+  end
 
   def add_course_instructor(new_instructor)
     course_instructors << new_instructor
