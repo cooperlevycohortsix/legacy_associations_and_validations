@@ -8,7 +8,7 @@ class Migration <ActiveRecord::Migration
     end
 
     create_table :children do |t|
-      t.string :name_array
+      t.string :name
       t.integer :father_id
       t.integer :mother_id
     end
@@ -16,8 +16,8 @@ class Migration <ActiveRecord::Migration
 end
 
 class Adult < ActiveRecord::Base
-  has_many :children_as_father, clas_name: "Child", foreign_key: "father_id"
-  has_many :children_as_mother, clas_name: "Child", foreign_key: "mother_id"
+  has_many :children_as_father, class_name: "Child", foreign_key: "father_id"
+  has_many :children_as_mother, class_name: "Child", foreign_key: "mother_id"
 
   def children
     children_as_father + children_as_mother

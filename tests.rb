@@ -66,19 +66,20 @@ class ApplicationTest < Minitest::Test
     assert_equal assignment, course.assignments.last
     course.destroy
     assert course.destroyed?
-
   end
 
-  #def test_associates_lessons_with_pre_class_assignments
-  #end
+  def test_associates_lessons_with_pre_class_assignments
+    l = Lesson.create(name: "biostatistics")
+    a = Assignment.create(name: "do_crack_cocaine")
+    assert l.pre_class_assignment = a
+  end
 
   def test_set_school_to_have_many_courses_through_school_terms
     school = School.create(name: "Haavad")
     term = Term.create(name: "Fall")
     c1 = Course.create(name: "Hermaphroditic_Postulations")
-    c2 = Course.create(name: "Phrenologystical metapharmacology2")
-    c3 = Course.create(name: "history of humor")
-    
-
+    school.terms << term
+    term.courses << c1
+    assert_equal c1, school.courses.last
   end
 end
