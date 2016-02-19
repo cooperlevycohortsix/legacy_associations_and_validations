@@ -12,10 +12,6 @@ class Course < ActiveRecord::Base
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
 
-  def add_readings(new_reading)
-    lessons << new_reading
-  end
-
   def add_course_instructor(new_instructor)
     course_instructors << new_instructor
   end

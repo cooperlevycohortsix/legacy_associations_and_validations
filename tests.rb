@@ -66,11 +66,13 @@ class ApplicationTest < Minitest::Test
     assert lesson.in_class_assignment = assignment
   end
 
-  # def test_course_has_many_readings_through_lessons
-  #   course = Course.create(name: "Basketweaving 101", course_code: "12345")
-  #   reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
-  #   assert course.readings = reading
-  # end
+  def test_course_has_many_readings_through_lessons
+    course = Course.create(name: "Basketweaving 101", course_code: "12345")
+    reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
+    lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
+    course.lessons = reading
+    assert_equal reading, course.lessons
+  end
 
   def test_schools_must_have_a_name
     new_s = School.create(name: "Harvard")
@@ -87,10 +89,14 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_user_has_a_first_name_a_last_name_and_an_email
+    person = User.create()
+    refute person.valid?
+  end
+
+  def test_that_the_users_email_is_unique
     person1 = User.create(first_name: "Bill", last_name: "Colander", email: "bill@gmail.com")
-    person2 = User.create()
-    refute person2.id
-    assert person1.id
+    person2 = User.create(first_name: "Sally", last_name: "Smith", email: "bill@gmail.com")
+    refute person2.valid?
   end
 
 end
