@@ -61,16 +61,15 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_associate_lessons_with_in_class_assignments
-    l = Lesson.create(name: "Basketweaving as a means of social engineering")
-    l.in_class_assignment = l
-    assert_equal l, l.in_class_assignment
+    lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
+    assignment = Assignment.create(name: "Make the test pass")
+    assert lesson.in_class_assignment = assignment
   end
 
   # def test_course_has_many_readings_through_lessons
-  #   c = Course.create(name: "Basketweaving 101", course_code: "12345")
-  #   r = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
-  #   c.readings << r
-  #   assert_equal r, c.readings.last
+  #   course = Course.create(name: "Basketweaving 101", course_code: "12345")
+  #   reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
+  #   assert course.readings = reading
   # end
 
   def test_schools_must_have_a_name
@@ -81,9 +80,17 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_terms_must_have_name_starts_on_ends_on_and_school_id
-    t = Term.create()
-    new_t = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 4)
-    refute t.id
-    assert new_t.starts_on
+    new_term1 = Term.create()
+    new_term2 = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 4)
+    refute new_term1.id
+    assert new_term2.id
   end
+
+  def test_user_has_a_first_name_a_last_name_and_an_email
+    person1 = User.create(first_name: "Bill", last_name: "Colander", email: "bill@gmail.com")
+    person2 = User.create()
+    refute person2.id
+    assert person1.id
+  end
+
 end
