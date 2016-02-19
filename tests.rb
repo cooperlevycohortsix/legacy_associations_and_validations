@@ -60,12 +60,11 @@ class ApplicationTest < Minitest::Test
     assert "can't destroy", output
   end
 
-  # def test_associate_lessons_with_in_class_assignments
-  #   l = Lesson.create(name: "Basketweaving as a means of social engineering")
-  #   in_class_assignments_id = 8
-  #   l.linked_to_assignment(l.in_class_assignments_id)
-  #   assert_equal in_class_assignments_id, l.in_class_assignments_id.last
-  # end
+  def test_associate_lessons_with_in_class_assignments
+    l = Lesson.create(name: "Basketweaving as a means of social engineering")
+    l.in_class_assignment = l
+    assert_equal l, l.in_class_assignment
+  end
 
   # def test_course_has_many_readings_through_lessons
   #   c = Course.create(name: "Basketweaving 101", course_code: "12345")
