@@ -86,24 +86,35 @@ class ApplicationTest < Minitest::Test
     new_term1 = Term.create()
     new_term2 = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 4)
     refute new_term1.id
-    assert new_term2.id
+    assert Term.find(new_term2.id)
   end
 
   def test_user_has_a_first_name_a_last_name_and_an_email
     person = User.create()
-    refute person.valid?
+    refute person.id
   end
 
   def test_that_the_users_email_is_unique
     person1 = User.create(first_name: "Bill", last_name: "Colander", email: "bill@gmail.com")
-    person2 = User.create(first_name: "Sally", last_name: "Smith", email: "bill@gmail.com")
-    assert_equal "Bill", User.last.first_name
+    person2 = User.create(first_name: "Sally", last_name: "Smith", email: "bill@gmail.com", photo_url: "https://lookatmypicture.com")
+    assert_raises do person2.save! end
+    person1.save!
   end
 
   def test_users_email_is_formatted_correctly
-    person1 = User.create(first_name: "Bill", last_name: "Colander", email: "bill@gmail.com")
-    person2 = User.create(first_name: "Sally", last_name: "Smith", email: "billgmailcom")
-    assert_equal "Bill", User.last.first_name
+    person1 = User.new(first_name: "Bill", last_name: "Colander", email: "bill1@gmail.com", photo_url: "https://lookatmypicture.com")
+    person2 = User.new(first_name: "Sally", last_name: "Smith", email: "billgmailcom")
+    assert_raises do person2.save! end
+    person1.save!
+    # refute person2.save
+    # assert person1.save
+  end
+
+  def test_users_photo_url_is_formatted_correctly
+    person1 = User.new(first_name: "Bill", last_name: "Colander", email: "bill2@gmail.com", photo_url: "https://lookatmypicture.com")
+    person2 = User.new(first_name: "Sally", last_name: "Smith", email: "billgmailcom", photo_url: "htxl:/lookatme.com")
+    assert person1.save
+    refute person2.save
   end
 
 end
