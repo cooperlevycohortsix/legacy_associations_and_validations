@@ -76,10 +76,10 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_schools_must_have_a_name
-    new_school = School.new(name: "Harvard")
-    school = School.new()
-    refute school.save
-    assert new_school.save
+    new_school = School.create(name: "Harvard")
+    school = School.create()
+    assert School.find(new_school.id)
+    refute school.id
   end
 
   def test_terms_must_have_name_starts_on_ends_on_and_school_id
@@ -91,6 +91,8 @@ class ApplicationTest < Minitest::Test
 
   def test_user_has_a_first_name_a_last_name_and_an_email
     person = User.create()
+    person2 = User.create(first_name: "Bill", last_name: "Colander", email: "bill99@gmail.com")
+    assert User.find(person2.id)
     refute person.id
   end
 

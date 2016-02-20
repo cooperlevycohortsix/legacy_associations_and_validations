@@ -1,4 +1,4 @@
 .DS_Store
 .homework.json
-.test.sqlite3
+test.sqlite3
 .byebug_history
