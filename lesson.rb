@@ -1,13 +1,19 @@
 class Lesson < ActiveRecord::Base
-validates :name, presence: true
-belongs_to :pre_class_assignment, class_name: "Assignment", foreign_key: "pre_class_assignment_id"
-
-
+  validates :name, presence: true
+  belongs_to :pre_class_assignment, class_name: "Assignment", foreign_key: "pre_class_assignment_id"
+  belongs_to :course
+  belongs_to :in_class_assignments, class_name: "Assignment",
+    foreign_key: "in_class_assignment_id"
+  has_many :readings, dependent: :destroy
   delegate :code_and_name, to: :course, prefix: true
 
   scope :roots, -> { where("parent_lesson_id IS NULL") }
   scope :without_day_assignments, -> { where("day_assignment_id IS NULL") }
   scope :without_night_assignments, -> { where("night_assignment_id IS NULL") }
+
+  def add_readings(new_reading)
+    readings << new_reading
+  end
 
   def self.linked_to_assignment(assignment)
     found_lesson = where(pre_class_assignment_id: assignment.id).first
