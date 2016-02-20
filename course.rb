@@ -18,8 +18,6 @@ class Course < ActiveRecord::Base
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
 
-
-
   def self.example_courses
     self.where(public: true).order("id DESC").first(5)
   end
