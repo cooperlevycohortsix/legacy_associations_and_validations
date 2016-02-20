@@ -63,7 +63,7 @@ class ApplicationTest < Minitest::Test
   def test_associate_lessons_with_in_class_assignments
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     assignment = Assignment.create(name: "Make the test pass",  percent_of_grade: 0.8)
-    assert lesson.in_class_assignment = assignment
+    assert lesson.in_class_assignments = assignment
   end
 
   def test_course_has_many_readings_through_lessons
@@ -83,8 +83,9 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_terms_must_have_name_starts_on_ends_on_and_school_id
+    new_school = School.create(name: "Harvard")
     new_term1 = Term.create()
-    new_term2 = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 4)
+    new_term2 = Term.create(starts_on: Date.new(2016,2,19), ends_on: Date.new(2016,2,19) >> 3 , school_id: 8)
     refute new_term1.id
     assert Term.find(new_term2.id)
   end
@@ -133,4 +134,11 @@ class ApplicationTest < Minitest::Test
     assert Assignment.find(assignment.id)
     refute new_assignment.id
   end
+
+  # def test_coursestudents_are_associated_with_students
+  #   person1 = User.create(first_name: "Will", last_name: "Engles", email: "will@gmail.com", photo_url: "https://checkmeout.com")
+  #   student1 = CourseStudent.create(created_at: DateTime.now)
+  #   assert
+  # end
+
 end

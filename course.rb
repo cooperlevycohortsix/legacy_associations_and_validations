@@ -14,7 +14,7 @@ class Course < ActiveRecord::Base
   delegate :ends_on, to: :term, prefix: true
 
   def add_assignments(assignment)
-    course << assignment
+    courses << assignment
   end
 
   def add_course_instructor(new_instructor)
