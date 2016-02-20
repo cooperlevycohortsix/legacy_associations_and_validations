@@ -41,7 +41,7 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_courses_are_associated_with_lessons
-    course = Course.create(name: "Basketweaving 101", course_code: "12345")
+    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     course.add_lessons(lesson)
     assert_equal lesson, course.lessons.last
@@ -49,7 +49,7 @@ class ApplicationTest < Minitest::Test
 
   def test_a_course_can_not_be_destroyed_if_course_instructors_exit
     output = ""
-    course = Course.create(name: "Basketweaving 101", course_code: "12345")
+    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     course_instructor = CourseInstructor.create
     course.add_course_instructor(course_instructor)
     begin
@@ -62,12 +62,12 @@ class ApplicationTest < Minitest::Test
 
   def test_associate_lessons_with_in_class_assignments
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
-    assignment = Assignment.create(name: "Make the test pass", course_id: 8, percent_of_grade: 0.8)
+    assignment = Assignment.create(name: "Make the test pass",  percent_of_grade: 0.8)
     assert lesson.in_class_assignment = assignment
   end
 
   def test_course_has_many_readings_through_lessons
-    course = Course.create(name: "Basketweaving 101", course_code: "12345")
+    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     course.add_lessons(lesson)
@@ -118,7 +118,17 @@ class ApplicationTest < Minitest::Test
   def test_Assignments_have_a_course_id_name_and_percent_of_grade
     assignment = Assignment.create(name: "Make the test pass", course_id: 8, percent_of_grade: 0.80)
     new_assignment = Assignment.new()
-    assert assignment.save
-    refute new_assignment.save
+    assert Assignment.find(assignment.id)
+    refute new_assignment.id
+  end
+
+  def test_assignment_name_is_unique_within_a_given_course_id
+    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
+    assignment = Assignment.create(name: "Make the test pass",  percent_of_grade: 0.8)
+    new_assignment = Assignment.create(name: "Make the test pass", percent_of_grade: 0.8)
+    course.assignments << assignment
+    course.assignments << new_assignment
+    assert Assignment.find(assignment.id)
+    refute new_assignment.id
   end
 end
