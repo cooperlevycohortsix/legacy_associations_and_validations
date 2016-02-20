@@ -93,6 +93,25 @@ class ApplicationTest < Minitest::Test
     refute new_reading.valid?
   end
 
-  #Validate that the Readings url must start with http:// or https://. Use a regular expression.
+  def test_readings_url_start_with_http_or_https
+    nr = Reading.create(url: "https://dantheman.com", order_number: 9999, lesson_id: 5555)
+    new_reading = Reading.create()
+    assert_equal 1, Reading.first(2).length
+  end
+
+  def test_courses_include_course_code_and_name
+    nc = Course.create(course_code: "999", name: "metalurgy")
+    assert_equal "999", nc.course_code
+    assert_equal "metalurgy", nc.name
+
+  end
+
+  def test_course_code_is_unique_within_a_given_id
   
+  end
+  #
+  # def test_course_code_starts_with_three_letters_and_ends_with_three_numbers_using_regex
+  #
+  # end
+
 end
