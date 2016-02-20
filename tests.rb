@@ -39,7 +39,7 @@ class ApplicationTest < Minitest::Test
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
     lesson.add_readings(reading)
     lesson.destroy
-    assert reading.destroyed?
+    refute reading.id
   end
 
   def test_courses_are_associated_with_lessons
@@ -72,9 +72,9 @@ class ApplicationTest < Minitest::Test
     course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
-    course.add_lessons(lesson)
-    lesson.add_readings(reading)
-    assert_equal reading, course.readings.last
+    course.lessons << lesson
+    lesson.readings << reading
+    assert_equal reading, course.lessons.reading
   end
 
   def test_schools_must_have_a_name
