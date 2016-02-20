@@ -6,6 +6,10 @@ has_many :courses, dependent: :restrict_with_error
 
   scope :for_school_id, ->(school_id) { where("school_id = ?", school_id) }
 
+  def add_course(course)
+    terms << course
+  end
+  
   def school_name
     schools ? school.name : "None"
   end
