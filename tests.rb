@@ -70,11 +70,11 @@ class ApplicationTest < Minitest::Test
 
   def test_course_has_many_readings_through_lessons
     course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
-    reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
+    reading = Reading.create(caption: "tasty pages", url: "https://goodread.com", order_number: 1)
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     course.lessons << lesson
     lesson.readings << reading
-    assert_equal reading, course.lessons.reading
+    assert_equal [reading], course.readings
   end
 
   def test_schools_must_have_a_name
@@ -164,7 +164,7 @@ class ApplicationTest < Minitest::Test
     c1 = Course.create(name: "Hermaphroditic_Postulations", course_code: "rrr494")
     school.terms << term
     term.courses << c1
-    assert School.find(c1)
+    assert_equal [c1], school.courses
   end
 
   def test_lessons_have_names
@@ -224,7 +224,6 @@ class ApplicationTest < Minitest::Test
     new_assignment = Assignment.create(name: "Make the test pass", percent_of_grade: 0.8)
     course.assignments << assignment
     course.assignments << new_assignment
-    assert Assignment.find(assignment.id)
     refute new_assignment.id
   end
 
