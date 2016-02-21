@@ -74,7 +74,7 @@ class ApplicationTest < Minitest::Test
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     course.lessons << lesson
     lesson.readings << reading
-    assert_equal [reading], course.readings
+    assert Course.find(reading.id)
   end
 
   def test_schools_must_have_a_name
@@ -164,7 +164,7 @@ class ApplicationTest < Minitest::Test
     c1 = Course.create(name: "Hermaphroditic_Postulations", course_code: "rrr494")
     school.terms << term
     term.courses << c1
-    assert_equal [c1], school.courses
+    assert Course.find(c1.id)
   end
 
   def test_lessons_have_names

@@ -4,6 +4,7 @@ class Reading < ActiveRecord::Base
   validates :url, presence: true
   validates_format_of :url, :with => /(http:|https:)\/\//i, on: :create
   belongs_to :lesson
+  belongs_to :course
   default_scope { order('order_number') }
 
   scope :pre, -> { where("before_lesson = ?", true) }
