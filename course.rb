@@ -1,15 +1,14 @@
 class Course < ActiveRecord::Base
   belongs_to :term
+  has_many :assignments
   has_many :course_students, dependent: :restrict_with_error
   has_many :assignments, dependent: :destroy
-  validates :course_code, presence: true
+  validates :course_code, presence: true, uniqueness: {:scope => :term_id}
   validates :name, presence: true
-  validates_uniqueness_of :course_code, :scope => [:term_id]
-  validates_format_of :course_code, :with => /[a-zA-Z]{3}[1-999]{3}\b/, on: :create
+  validates_format_of :course_code, :with => /[a-zA-Z]{3}[1-9,0]{3}\b/, on: :create
   has_many :course_instructors, dependent: :restrict_with_exception
   has_many :lessons, dependent: :destroy
   has_many :readings, through: :lessons
-  has_many :assignments
   default_scope { order("courses.term_id DESC, courses.course_code, courses.id DESC") }
 
   # Magic number also used in old? method below.

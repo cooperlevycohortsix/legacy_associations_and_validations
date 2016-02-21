@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true
   validates :email, presence: true, uniqueness: true
   validates_format_of :email, with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i , on: :create, allow_blank: true
-  validates_format_of :photo_url, with: /(http:|https:)\/\//, on: :create, allow_blank: true
+  validates_format_of :photo_url, with: /(http:|https:)\/\//i, on: :create, allow_blank: true
   scope :want_to_be_instructors, -> { where(wants_to_be_instructor: true) }
   scope :instructors_for_school_id, ->(school_id) { where(school_id: school_id, instructor: true) }
 

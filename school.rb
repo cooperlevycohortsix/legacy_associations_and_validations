@@ -4,5 +4,9 @@ class School < ActiveRecord::Base
   validates :name, presence: true
   default_scope { order('name') }
 
+  def add_term(new_term)
+    schools << new_term
+  end
+
 
 end
