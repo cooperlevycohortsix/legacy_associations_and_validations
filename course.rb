@@ -19,18 +19,6 @@ class Course < ActiveRecord::Base
   delegate :starts_on, to: :term, prefix: true
   delegate :ends_on, to: :term, prefix: true
 
-  def add_assignments(assignment)
-    courses << assignment
-  end
-
-  def add_course_instructor(new_instructor)
-    course_instructors << new_instructor
-  end
-
-  def add_lessons(new_lesson)
-    lessons << new_lesson
-  end
-
   def self.example_courses
     self.where(public: true).order("id DESC").first(5)
   end

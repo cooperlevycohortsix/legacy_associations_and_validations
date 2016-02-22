@@ -30,14 +30,16 @@ class ApplicationTest < Minitest::Test
   def test_associate_lessons_with_readings
     lesson = Lesson.create(name: "Basketweaving")
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
-    lesson.add_readings(reading)
-    assert_equal reading, lesson.readings.last
+
+    lesson.readings << reading
+    assert_equal reading, lesson.readings.last.reload
   end
 
-  def test_lessons_readings_removed_when_lessons_destroyed
+  def test_readings_removed_when_lessons_destroyed
     lesson = Lesson.new(name: "Basketweaving")
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
-    lesson.add_readings(reading)
+
+    lesson.readings << reading
     lesson.destroy
     refute reading.id
   end
@@ -45,15 +47,15 @@ class ApplicationTest < Minitest::Test
   def test_courses_are_associated_with_lessons
     course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
-    course.add_lessons(lesson)
-    assert_equal lesson, course.lessons.last
+    course.lessons << lesson
+    assert_equal lesson, course.lessons.last.reload
   end
 
   def test_a_course_can_not_be_destroyed_if_course_instructors_exit
     output = ""
     course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     course_instructor = CourseInstructor.create
-    course.add_course_instructor(course_instructor)
+    course.course_instructors << course_instructor
     begin
       course.destroy
     rescue
@@ -63,9 +65,11 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_associate_lessons_with_in_class_assignments
+    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
     lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
     assignment = Assignment.create(name: "Make the test pass",  percent_of_grade: 0.8)
-    assert lesson.in_class_assignments = assignment
+    course.assignments << assignment
+    assert assignment.in_class_assignments << lesson
   end
 
   def test_course_has_many_readings_through_lessons
@@ -79,21 +83,21 @@ class ApplicationTest < Minitest::Test
 
   def test_schools_must_have_a_name
     new_school = School.create(name: "Harvard")
-    school = School.create()
+    school = School.new()
     assert School.find(new_school.id)
-    refute school.id
+    refute school.save
   end
 
   def test_terms_must_have_name_starts_on_ends_on_and_school_id
-    new_term1 = Term.create()
-    refute new_term1.valid?
+    new_term1 = Term.new()
+    refute new_term1.save
   end
 
   def test_user_has_a_first_name_a_last_name_and_an_email
-    person = User.create()
+    person = User.new()
     person2 = User.create(first_name: "Bill", last_name: "Colander", email: "bill99@gmail.com")
     assert User.find(person2.id)
-    refute person.id
+    refute person.save
   end
 
   def test_that_the_users_email_is_unique
@@ -153,9 +157,11 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_associates_lessons_with_pre_class_assignments
-    l = Lesson.create(name: "biostatistics")
-    a = Assignment.create(name: "do_crack_cocaine")
-
+    course = Course.create(course_code: "yys737", name: "Hermaphroditic_Postulations")
+    lesson = Lesson.create(name: "biostatistics")
+    assignment = Assignment.create(name: "do_crack_cocaine")
+    course.assignments << assignment
+    assert assignment.in_class_assignments << lesson
   end
 
   def test_set_school_to_have_many_courses_through_school_terms
