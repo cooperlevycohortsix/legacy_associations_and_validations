@@ -32,7 +32,7 @@ class ApplicationTest < Minitest::Test
     reading = Reading.create(caption: "good read", url: "https://goodread.com", order_number: 1)
 
     lesson.readings << reading
-    assert_equal reading, lesson.readings.last.reload
+    assert_equal [reading], Lesson.last.readings
   end
 
   def test_readings_removed_when_lessons_destroyed
@@ -45,10 +45,11 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_courses_are_associated_with_lessons
-    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
-    lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
-    course.lessons << lesson
-    assert_equal lesson, course.lessons.last.reload
+    course1 = Course.create(name: "Basketweaving 101", course_code: "Eng106")
+    lesson1 = Lesson.create(name: "Basketweaving as a means of social engineering")
+
+    course1.lessons << lesson1
+    assert Course.find(lesson1.id)
   end
 
   def test_a_course_can_not_be_destroyed_if_course_instructors_exit
@@ -73,12 +74,12 @@ class ApplicationTest < Minitest::Test
   end
 
   def test_course_has_many_readings_through_lessons
-    course = Course.create(name: "Basketweaving 101", course_code: "Eng101")
-    reading = Reading.create(caption: "tasty pages", url: "https://goodread.com", order_number: 1)
-    lesson = Lesson.create(name: "Basketweaving as a means of social engineering")
-    course.lessons << lesson
-    lesson.readings << reading
-    assert Course.find(reading.id)
+    course = Course.create(name: "Basketweaving", course_code: "Eng101")
+    reading3 = Reading.create(caption: "tasty pages", url: "https://goodread.com", order_number: 1)
+    lesson3 = Lesson.create(name: "Basketweaving as a means of social engineering")
+    course.lessons << lesson3
+    lesson3.readings << reading3
+    assert Course.find(reading3.id)
   end
 
   def test_schools_must_have_a_name
